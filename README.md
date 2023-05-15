@@ -1,8 +1,10 @@
 # csvformatter
 
 ## Features
-Select csv text, right click, Allign csv. 
+Select csv text -> right click -> Allign csv.  <br>
 Columns will be alligned automatically detecting between these possible separators ( , | ; \t )
+
+Not all text needs to be selected, just the lines where the text is placed.
 
 ## Release Notes
 

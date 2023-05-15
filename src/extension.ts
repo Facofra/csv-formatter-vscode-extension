@@ -91,7 +91,18 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		const selection = editor.selection;
-		let text = editor.document.getText(selection);
+		
+		const lineStartPosition = new vscode.Position(selection.start.line, 0);
+
+		const endLine = editor.document.lineAt(selection.end.line); // obtener texto de ultima linea seleccionada
+		const endLineLength = endLine.text.length;
+		const lineEndPosition = new vscode.Position(selection.end.line, endLineLength);
+		
+		const selectionRange = new vscode.Range(lineStartPosition, lineEndPosition);
+		
+ 		let text = editor.document.getText(selectionRange); // Obtiene el texto completo de las líneas de la selección
+
+
 		text = text.trim();
 
 		const separador: string = getSeparador(text);
@@ -101,23 +112,18 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.window.showInformationMessage('No se detectó separador');
 			return;
 		}
-
+		
+		vscode.window.showInformationMessage('Separador detectado: ' + (separador === "\t" ? "Tab (\\t)":separador));
 				
 		let texto_final = formatText(text,separador);
 		
 		editor.edit(editBuilder => {
 			
-			editBuilder.delete(selection);
-			editBuilder.insert(selection.start, texto_final);
+			editBuilder.delete(selectionRange);
+			editBuilder.insert(lineStartPosition, texto_final);
 			
 		});
 		
-
-
-
-
-
-
 
 	});
 
