@@ -115,6 +115,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 		text = text.trim();
+		text += "\t"	// no modifica el output, pero arregla cuando el separdor es \t
 
 		const separador: string = getSeparador(text);
 		
