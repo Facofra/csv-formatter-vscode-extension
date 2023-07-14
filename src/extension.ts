@@ -3,10 +3,16 @@ import * as vscode from 'vscode';
 function formatText(texto:string, separador:string ) {
 
 	let lineas = texto.split(/\r?\n/);
+	let tabla;
 
-	let tabla = lineas.map(linea => linea.split(separador));
+	if (separador === ',') { // si es con coma, comprobar que no esté entre quotes
+		let regex = new RegExp(separador + "(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
+		tabla = lineas.map(linea => linea.split(regex));
+	}else{
+		tabla = lineas.map(linea => linea.split(separador));
+	}
+	
 	let cantidad_columnas = tabla[0].length;
-
 	let columnas: string[][] = [];
 	for (let i = 0; i < cantidad_columnas; i++) {
 		let columna = tabla.map(fila => fila[i]);
@@ -48,10 +54,17 @@ function getSeparador(texto:string) {
         let lengthColumnasActual=0;
 		let lengthColumnasAnterior=0;
         let columnasCoinciden=true;
-
+		
+		let cantidadColumnas;
 		for (const linea of lineas) {
-			let cantidadColumnas = linea.split(separador).length;
-            console.log(linea.split(separador));
+
+			if (separador === ',') {
+				cantidadColumnas = linea.split(/,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/).length; // si es con coma, comprobar que no esté entre quotes
+				
+			}else{
+				cantidadColumnas = linea.split(separador).length;
+			}
+
 
 			if (lengthColumnasAnterior===0) {
 				lengthColumnasAnterior=cantidadColumnas;
@@ -61,8 +74,6 @@ function getSeparador(texto:string) {
 
 			lengthColumnasActual = cantidadColumnas;
 
-            console.log("actual: "+ lengthColumnasActual);
-            console.log("anterior: " + lengthColumnasAnterior);
 
             if (lengthColumnasActual != lengthColumnasAnterior || lengthColumnasActual == 1) {
                 columnasCoinciden = false;
