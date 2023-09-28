@@ -40,7 +40,7 @@ function formatText(texto:string, separador:string ) {
 		texto_final += output_linea + "\n";
 
 	}
-	texto_final = texto_final.trim();
+	
 	return texto_final;
 }
 
@@ -92,6 +92,15 @@ function getSeparador(texto:string) {
     return separadorDetectado;
 }
 
+function eliminarLineasVacias(texto:string) {
+    var lineas = texto.split('\n');
+    var lineasNoVacias = lineas.filter(function(linea) {
+        // Usa una expresión regular para verificar si la línea contiene solo espacios.
+        return /\S/.test(linea);
+    });
+    return lineasNoVacias.join('\n');
+}
+
 export function activate(context: vscode.ExtensionContext) {
 
 	let disposable = vscode.commands.registerCommand('csvformatter.csvformatter', () => {
@@ -114,8 +123,7 @@ export function activate(context: vscode.ExtensionContext) {
  		let text = editor.document.getText(selectionRange); // Obtiene el texto completo de las líneas de la selección
 
 
-		text = text.trim();
-		text += "\t"	// no modifica el output, pero arregla cuando el separdor es \t
+		text = eliminarLineasVacias(text);
 
 		const separador: string = getSeparador(text);
 		
