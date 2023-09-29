@@ -111,6 +111,11 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		const selection = editor.selection;
+
+		if (selection.end.line - selection.start.line >= 500) {
+			vscode.window.showInformationMessage('Selección muy grande');
+			return;
+		}
 		
 		const lineStartPosition = new vscode.Position(selection.start.line, 0);
 
