@@ -45,7 +45,7 @@ function formatText(texto:string, separador:string ) {
 }
 
 function getSeparador(texto:string) {
-	let posiblesSeparadores = ["|",";",",","\t"];
+	let posiblesSeparadores = ["|",";",",","\t",":","="];
 	let lineas = texto.split(/\r?\n/);
 
 	let separadorDetectado ="";
@@ -112,7 +112,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const selection = editor.selection;
 
-		if (selection.end.line - selection.start.line >= 500) {
+		if (selection.end.line - selection.start.line >= 1000) {
 			vscode.window.showInformationMessage('Selección muy grande');
 			return;
 		}
